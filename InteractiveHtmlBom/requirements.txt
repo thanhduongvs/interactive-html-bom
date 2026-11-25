@@ -1,0 +1,9 @@
+# Dependencies for the KiCad IPC API plugin runtime.
+# KiCad installs these into a per-plugin virtual environment.
+kicad-python>=0.5.0
+# The settings dialog needs wxPython. pip has wheels for Windows and macOS.
+# On Linux there are usually no wheels and building from source is slow or
+# fails, so install it with the system package manager instead (for example
+# python3-wxgtk4.0 on Debian/Ubuntu); KiCad's plugin venv can see system
+# packages. Without wxPython the plugin reports the import error and exits.
+wxPython>=4.2; sys_platform != "linux"

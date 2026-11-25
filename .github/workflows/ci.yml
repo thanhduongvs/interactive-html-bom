@@ -1,0 +1,48 @@
+---
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  Build:
+    name: Python ${{ matrix.python-version }}
+
+    strategy:
+      matrix:
+        os:
+          - Ubuntu
+        python-version:
+          - "3.9"
+          - "3.13"
+
+    runs-on: ${{ matrix.os }}-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        # wxPython is only needed for the settings dialog; the tests run
+        # without it, so install the remaining dependencies directly.
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "kicad-python>=0.5.0" "jsonschema>=4.1" pytest
+
+      - name: Test
+        env:
+          INTERACTIVE_HTML_BOM_NO_DISPLAY: "1"
+        run: python -m pytest -vv tests
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false

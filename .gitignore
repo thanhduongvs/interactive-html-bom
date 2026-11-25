@@ -1,0 +1,19 @@
+*.pyc
+.idea
+.vscode
+*.iml
+*.bak
+test
+releases
+demo
+*config.ini
+InteractiveHtmlBom/web/user*
+dist/
+.venv
+
+# kicad's files
+.history
+*.lck
+*.kicad_prl
+*.kicad_pro
+*-backups
